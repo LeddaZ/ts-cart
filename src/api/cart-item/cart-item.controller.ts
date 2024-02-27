@@ -13,7 +13,7 @@ export const add = async (req: Request, res: Response, _next: NextFunction) => {
 
   const product = await productService.getById(productId)
   if (!product) {
-    res.send(404)
+    res.sendStatus(404)
     return
   }
 
