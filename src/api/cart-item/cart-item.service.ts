@@ -1,10 +1,36 @@
-import productService from '../product/product.service'
 import { CartItem } from './cart-item.entity'
+import productService from '../product/product.service'
+import { isPopulated } from '../../utils/is-populated-obj'
 
-export const CART: CartItem[] = []
+const CART: CartItem[] = []
 
 export class CartItemService {
-  async add(item: CartItem) {
+  async list(): Promise<CartItem[]> {
+    const promises = CART.map((item) => {
+      return this.populateCartItem(item)
+    })
+    return Promise.all(promises)
+  }
+
+  async getById(id: string): Promise<CartItem | null> {
+    const item = CART.find((element) => element.id === id)
+    if (!item) {
+      return null
+    }
+
+    return this.populateCartItem(item)
+  }
+
+  protected async populateCartItem(item: CartItem) {
+    const id = isPopulated(item.product) ? item.product.id : item.product
+    const product = await productService.getById(id)
+    return {
+      ...item,
+      product: product!,
+    }
+  }
+
+  async add(item: CartItem): Promise<CartItem> {
     const existing = CART.find((element) => element.product === item.product)
 
     if (existing) {
@@ -14,37 +40,26 @@ export class CartItemService {
     }
 
     const toAdd = {
+      id: `${CART.length}`,
       ...item,
     }
 
     CART.push(toAdd)
 
-    return this.getById(toAdd.id)
+    const newItem = await this.getById(toAdd.id)
+    return newItem!
   }
 
-  async update(id: string, data: Partial<Omit<CartItem, 'id' | 'product'>>) {
-    const existing = await this.getById(id)
-
+  async update(id: string, data: Partial<Omit<CartItem, 'id' | 'product'>>): Promise<CartItem> {
+    const existing = CART.find((element) => element.id === id)
     if (!existing) {
-      return null
+      throw new Error('Not Found')
     }
 
     Object.assign(existing, data)
-
-    return existing
+    const updated = await this.getById(id)
+    return updated!
   }
-
-  async getById(id: string) {
-    const item = CART.find((element) => element.id === id)
-    if (!item) {
-      return null
-    }
-
-    const product = await productService.getById(item.product)
-    return this.populateCartItem
-  }
-
-  async populateCartItem(item: CartItem) {}
 }
 
 export default new CartItemService()
