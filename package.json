@@ -1,7 +1,7 @@
 {
-  "name": "express",
+  "name": "ts-express",
   "version": "1.0.0",
-  "description": "ciao",
+  "description": "Modular shopping cart API example written in TypeScript.",
   "scripts": {
     "dev": "nodemon",
     "start": "ts-node src/index.ts",
