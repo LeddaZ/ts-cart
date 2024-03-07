@@ -26,7 +26,7 @@ export class CartItemService {
     const product = await productService.getById(id)
     return {
       ...item,
-      product: product!,
+      product: product!
     }
   }
 
@@ -35,13 +35,13 @@ export class CartItemService {
 
     if (existing) {
       return this.update(existing.id!, {
-        quantity: existing.quantity + item.quantity,
+        quantity: existing.quantity + item.quantity
       })
     }
 
     const toAdd = {
       id: `${CART.length}`,
-      ...item,
+      ...item
     }
 
     CART.push(toAdd)

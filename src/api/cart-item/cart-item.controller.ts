@@ -19,7 +19,7 @@ export const add = async (req: Request, res: Response, _next: NextFunction) => {
 
   const newItem: CartItem = {
     product: productId,
-    quantity,
+    quantity
   }
 
   const saved = await cartItemService.add(newItem)
