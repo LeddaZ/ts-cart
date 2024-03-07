@@ -6,7 +6,7 @@ function generateRandomProduct() {
     name: faker.commerce.productName(),
     description: faker.commerce.productDescription(),
     netPrice: parseFloat(faker.commerce.price({ max: 10000 })),
-    weight: faker.number.float({ min: 50, max: 2000, fractionDigits: 2 }),
+    weight: faker.number.int({ min: 50, max: 2000 }),
     discount: faker.number.float({ min: 0, max: 1, fractionDigits: 2 })
   }
 }
