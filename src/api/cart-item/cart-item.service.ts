@@ -1,37 +1,21 @@
 import { CartItem } from './cart-item.entity'
-import productService from '../product/product.service'
-import { isPopulated } from '../../utils/is-populated-obj'
-
-const CART: CartItem[] = []
+import { CartItemModel } from './cart-item.model'
 
 export class CartItemService {
   async list(): Promise<CartItem[]> {
-    const promises = CART.map((item) => {
-      return this.populateCartItem(item)
-    })
-    return Promise.all(promises)
+    return CartItemModel.find().populate('product')
   }
 
   async getById(id: string): Promise<CartItem | null> {
-    const item = CART.find((element) => element.id === id)
+    const item = await CartItemModel.findById(id).populate('product')
     if (!item) {
       return null
     }
-
-    return this.populateCartItem(item)
-  }
-
-  protected async populateCartItem(item: CartItem) {
-    const id = isPopulated(item.product) ? item.product.id : item.product
-    const product = await productService.getById(id)
-    return {
-      ...item,
-      product: product!
-    }
+    return item
   }
 
   async add(item: CartItem): Promise<CartItem> {
-    const existing = CART.find((element) => element.product === item.product)
+    const existing = await CartItemModel.findOne({ product: item.product })
 
     if (existing) {
       return this.update(existing.id!, {
@@ -39,24 +23,18 @@ export class CartItemService {
       })
     }
 
-    const toAdd = {
-      id: `${CART.length}`,
-      ...item
-    }
-
-    CART.push(toAdd)
-
-    const newItem = await this.getById(toAdd.id)
-    return newItem!
+    const newItem = await CartItemModel.create(item)
+    return (await this.getById(newItem.id))!
   }
 
   async update(id: string, data: Partial<Omit<CartItem, 'id' | 'product'>>): Promise<CartItem> {
-    const existing = CART.find((element) => element.id === id)
+    const existing = await CartItemModel.findById(id)
     if (!existing) {
       throw new Error('Not Found')
     }
 
     Object.assign(existing, data)
+    await existing.save()
     const updated = await this.getById(id)
     return updated!
   }

@@ -35,5 +35,3 @@ export const updateQuantity = async (req: Request, res: Response, _next: NextFun
 
   res.json(updated)
 }
-
-export const remove = async (_req: Request, _res: Response, _next: NextFunction) => {}
