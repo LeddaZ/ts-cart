@@ -1,5 +1,5 @@
-import { CartItem } from './cart-item.entity'
 import mongoose from 'mongoose'
+import { CartItem } from './cart-item.entity'
 
 const cartItemSchema = new mongoose.Schema<CartItem>({
   quantity: Number,

@@ -1,5 +1,5 @@
-import { Product } from './product.entity'
 import mongoose from 'mongoose'
+import { Product } from './product.entity'
 
 const productSchema = new mongoose.Schema<Product>({
   name: { type: String },

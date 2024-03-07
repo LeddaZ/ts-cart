@@ -1,8 +1,9 @@
-import express from 'express'
-import cors from 'cors'
-import morgan from 'morgan'
-import bodyParser from 'body-parser'
 import apiRouter from './api/routes'
+import bodyParser from 'body-parser'
+import cors from 'cors'
+import express from 'express'
+import morgan from 'morgan'
+import { errorHandlers } from './api/errors'
 
 const app = express()
 
@@ -11,5 +12,7 @@ app.use(morgan('tiny'))
 app.use(bodyParser.json())
 
 app.use('/api', apiRouter)
+
+app.use(errorHandlers)
 
 export default app
