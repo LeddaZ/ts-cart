@@ -1,17 +1,16 @@
-import PRODUCTS from '../../../products.json'
+import PRODUCTS from '../../utils/products.json'
 import { Product } from './product.entity'
 
 export class ProductService {
   async find(search?: string): Promise<Product[]> {
-    let result = PRODUCTS
+    let results = PRODUCTS
 
     if (search) {
-      result = PRODUCTS.filter((item) => {
+      results = PRODUCTS.filter((item) => {
         return item.name.toLowerCase().includes(search.toLowerCase())
       })
     }
-
-    return result
+    return results
   }
 
   async getById(id: string): Promise<Product | undefined> {

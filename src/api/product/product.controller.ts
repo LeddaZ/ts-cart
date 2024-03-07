@@ -3,8 +3,10 @@ import productSrv from './product.service'
 
 export const list = async (req: Request, res: Response, _next: NextFunction) => {
   const { search }: { search?: string } = req.query
-  const result = await productSrv.find(search)
-  res.json(result)
+
+  const results = await productSrv.find(search)
+
+  res.json(results)
 }
 
 export const detail = async (req: Request, res: Response, _next: NextFunction) => {
@@ -13,6 +15,8 @@ export const detail = async (req: Request, res: Response, _next: NextFunction) =
   if (!item) {
     res.status(404)
     res.send('Product not found')
+    return
   }
+
   res.json(item)
 }
