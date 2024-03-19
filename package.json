@@ -17,6 +17,7 @@
       "node_modules"
     ],
     "watch": [
+      ".env",
       "src"
     ],
     "exec": "npm start",
