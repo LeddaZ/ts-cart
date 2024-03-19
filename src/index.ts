@@ -1,8 +1,12 @@
 import app from './app'
 import mongoose from 'mongoose'
+import dotenv from 'dotenv'
+
+dotenv.config()
+const connString = process.env.CONNECTION_STRING ?? ''
 
 mongoose
-  .connect('mongodb://127.0.0.1:27017/ts-express')
+  .connect(connString)
   .then((_) => {
     const port = 3000
     app.listen(port, () => {
