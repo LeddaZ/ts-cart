@@ -1,7 +1,7 @@
 import cartItemService from './cart-item.service'
 import productService from '../product/product.service'
 import { CartItem } from './cart-item.entity'
-import { NextFunction, Request, Response } from 'express'
+import { json, NextFunction, Request, Response } from 'express'
 import { NotFoundError } from '../errors/not-found'
 
 export const list = async (_req: Request, res: Response, next: NextFunction) => {
@@ -28,6 +28,20 @@ export const add = async (req: Request, res: Response, next: NextFunction) => {
     }
 
     const saved = await cartItemService.add(newItem)
+    res.json(saved)
+  } catch (err) {
+    next(err)
+  }
+}
+
+export const remove = async (req: Request, res: Response, next: NextFunction) => {
+  try {
+    const product = await cartItemService.getById(req.params.id)
+    if (!product) {
+      throw new NotFoundError()
+    }
+
+    const saved = await cartItemService.remove(product)
     res.json(saved)
   } catch (err) {
     next(err)

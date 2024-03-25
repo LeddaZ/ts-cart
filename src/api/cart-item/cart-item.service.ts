@@ -28,6 +28,15 @@ export class CartItemService {
     return (await this.getById(newItem.id))!
   }
 
+  async remove(item: CartItem): Promise<CartItem> {
+    const existing = await CartItemModel.findOne({ product: item.product })
+    let del = null
+    if (existing) {
+      del = await CartItemModel.findByIdAndDelete(existing.id)
+    }
+    return del!
+  }
+
   async update(id: string, data: Partial<Omit<CartItem, 'id' | 'product'>>): Promise<CartItem> {
     const existing = await CartItemModel.findById(id)
     if (!existing) {
