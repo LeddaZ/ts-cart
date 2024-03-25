@@ -6,7 +6,8 @@ const productSchema = new mongoose.Schema<Product>({
   description: String,
   weight: Number,
   netPrice: Number,
-  discount: Number
+  discount: Number,
+  image: String
 })
 
 productSchema.set('toJSON', {

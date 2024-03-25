@@ -5,4 +5,5 @@ export interface Product {
   weight: number
   netPrice: number
   discount: number
+  image: string
 }
