@@ -1,7 +1,7 @@
 import cartItemService from './cart-item.service'
 import productService from '../product/product.service'
 import { CartItem } from './cart-item.entity'
-import { json, NextFunction, Request, Response } from 'express'
+import { NextFunction, Request, Response } from 'express'
 import { NotFoundError } from '../errors/not-found'
 
 export const list = async (_req: Request, res: Response, next: NextFunction) => {
