@@ -36,13 +36,9 @@ export const add = async (req: Request, res: Response, next: NextFunction) => {
 
 export const remove = async (req: Request, res: Response, next: NextFunction) => {
   try {
-    const product = await cartItemService.getById(req.params.id)
-    if (!product) {
-      throw new NotFoundError()
-    }
-
-    const saved = await cartItemService.remove(product)
-    res.json(saved)
+    const { id } = req.params
+    await cartItemService.remove(id)
+    res.send()
   } catch (err) {
     next(err)
   }
