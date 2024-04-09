@@ -7,6 +7,7 @@ import { TypedRequest } from '../../utils/typed-request'
 import { CreateCartItemDTO } from './cart-item.dto'
 import { plainToClass } from 'class-transformer'
 import { validate } from 'class-validator'
+import { ValidationError } from '../errors/validation'
 
 export const list = async (_req: Request, res: Response, next: NextFunction) => {
   try {
@@ -26,7 +27,7 @@ export const add = async (
     const data = plainToClass(CreateCartItemDTO, req.body)
     const errors = await validate(data)
     if (errors.length) {
-      next(errors)
+      next(new ValidationError(errors))
       return
     }
 
