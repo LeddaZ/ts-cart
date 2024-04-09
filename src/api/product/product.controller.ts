@@ -1,8 +1,14 @@
 import productSrv from './product.service'
 import { NextFunction, Request, Response } from 'express'
 import { NotFoundError } from '../errors/not-found'
+import { TypedRequest } from '../../utils/typed-request'
+import { ProductQueryDTO } from './product.dto'
 
-export const list = async (req: Request, res: Response, next: NextFunction) => {
+export const list = async (
+  req: TypedRequest<unknown, ProductQueryDTO>,
+  res: Response,
+  next: NextFunction
+) => {
   try {
     const results = await productSrv.find(req.query)
     res.json(results)

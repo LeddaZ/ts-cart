@@ -3,6 +3,10 @@ import productService from '../product/product.service'
 import { CartItem } from './cart-item.entity'
 import { NextFunction, Request, Response } from 'express'
 import { NotFoundError } from '../errors/not-found'
+import { TypedRequest } from '../../utils/typed-request'
+import { CreateCartItemDTO } from './cart-item.dto'
+import { plainToClass } from 'class-transformer'
+import { validate } from 'class-validator'
 
 export const list = async (_req: Request, res: Response, next: NextFunction) => {
   try {
@@ -13,8 +17,19 @@ export const list = async (_req: Request, res: Response, next: NextFunction) => 
   }
 }
 
-export const add = async (req: Request, res: Response, next: NextFunction) => {
+export const add = async (
+  req: TypedRequest<CreateCartItemDTO>,
+  res: Response,
+  next: NextFunction
+) => {
   try {
+    const data = plainToClass(CreateCartItemDTO, req.body)
+    const errors = await validate(data)
+    if (errors.length) {
+      next(errors)
+      return
+    }
+
     const { productId, quantity } = req.body
 
     const product = await productService.getById(productId)
